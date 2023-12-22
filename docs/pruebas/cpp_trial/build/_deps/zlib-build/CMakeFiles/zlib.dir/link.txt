@@ -1,0 +1,3 @@
+"C:\Program Files\CMake\bin\cmake.exe" -E rm -f CMakeFiles\zlib.dir/objects.a
+C:\PROGRA~1\HASKEL~1\86E4AC~1.5\mingw\bin\ar.exe qc CMakeFiles\zlib.dir/objects.a @CMakeFiles\zlib.dir\objects1.rsp
+C:\MinGW\bin\gcc.exe  -Wall -Wno-implicit-fallthrough -shared -o libzlib.dll -Wl,--out-implib,libzlib.dll.a -Wl,--major-image-version,0,--minor-image-version,0 -Wl,--whole-archive CMakeFiles\zlib.dir/objects.a -Wl,--no-whole-archive 

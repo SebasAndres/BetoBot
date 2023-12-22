@@ -1,0 +1,33 @@
+PROCESOS DE INGESTA
+-------------------
+
+proc RegistrarPartidoEnRedis(P:Partido){
+    partidos_heap_by_date.insert(p.date, P)
+
+    zScore++
+    num_played++
+
+    tableX[E1, E2] += 1:0 ? (P.goals[0] > 0 && P.goals[1] > 0)
+    tableQ[E1, E2] += 1:0 ? (P.goals[0] = 0 && P.goals[1] = 0)
+    tablePlayed[E1, E2]++
+}
+
+proc RegistrarFixture(liga){   
+    fixture := leerFixture(liga)
+    for P in fixture:
+        RegistrarPartidoEnRedis(P)
+
+    setPZ_liga(); # pzLiga = zScore / num_played
+}
+
+proc zScore(){
+    return zScore / num_played^2
+}
+
+proc getXE1XE2(E1, E2){
+    vals = tableX[E1, E2]
+    num_played_each_other = tablePlayed[E1, E2]
+    return vals / num_played_each_other
+}
+
+proc get

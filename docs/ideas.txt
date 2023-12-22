@@ -1,0 +1,52 @@
+---------------------------------------------------------------------------------
+Base:
+[1] Worker ingesta con periodicidad en Redis
+[2] Entrenamiento y guardado de modelos
+
+Uso:
+[3] Mfwk->apis->getProbaEventX(E1, E2, league):
+    - Mfwk busca el ultimo modelo estadistico F del tipo X
+    - P(XE1 ^ XE2), P(QE1 ^ QE2), Z se leen de Redis (datos necesarios)
+    - res = Mfwk->trained_model->predict(P(XE1 ^ XE2), P(QE1 ^ QE2), Z, ...)
+---------------------------------------------------------------------------------
+
+Datos en Redis:
+----------------------------------
+Liga:
+- Pz: Probabilidad de que en un partido ambos conviertan
+- nReg: #Partidos registrados
+- Matches: Partidos registrados
+- TableX: Tabla de probabilidades conjuntas de XE
+- TableQ: Tabla de probabilidades conjuntas de QE
+----------------------------------
+
+Equipo:
+- XE: Probabilidad de convertir
+- QE: Probabilidad de que le conviertan
+- Matches: Referencia a partidos jugados
+----------------------------------
+
+---------------------------------------------------------------------------------
+
+proc RegistrarPartidoEnRedis(P:Partido){
+    partidos_heap_by_date.insert(p.date, P)
+   
+    zScore++
+    num_played++
+
+    tableX[E1, E2] += 1:0 ? (P.goals[0] > 0 && P.goals[1] > 0)
+    tableQ[E1, E2] += 1:0 ? (P.goals[0] = 0 && P.goals[1] = 0)
+    tablePlayed[E1, E2]++
+}
+
+proc zScore(){
+    return zScore / num_played^2
+}
+
+proc getXE1XE2(E1, E2){
+    vals = tableX[E1, E2]
+    num_played_each_other = tablePlayed[E1, E2]
+    return vals / num_played_each_other
+}
+
+

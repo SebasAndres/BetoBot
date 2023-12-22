@@ -1,0 +1,1 @@
+Worker con el consumo de los modelos entrenados

@@ -1,0 +1,3 @@
+C:/Users/sebas/Proyectos/BETs/worker-data/build/_deps/zlib-subbuild/CMakeFiles/zlib-populate.dir
+C:/Users/sebas/Proyectos/BETs/worker-data/build/_deps/zlib-subbuild/CMakeFiles/edit_cache.dir
+C:/Users/sebas/Proyectos/BETs/worker-data/build/_deps/zlib-subbuild/CMakeFiles/rebuild_cache.dir

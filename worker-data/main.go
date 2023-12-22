@@ -45,6 +45,12 @@ func main() {
 
 		// Por cada fixture del torneo
 		for year, url := range urls {
+
+			if rdb.SIsMember(ctx, PREFIX+"_URLS_DOWNLOADED", url).Val() {
+				fmt.Println("Fixture " + tournament + "_" + strconv.Itoa(year) + " already downloaded")
+				continue
+			}
+
 			fmt.Println("Downloading " + strconv.Itoa(year))
 			fmt.Println("From: " + url)
 

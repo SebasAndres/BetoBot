@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"encoding/json"
-	"fmt"
+	// "fmt"
 	"strconv"
 
 	"github.com/redis/go-redis/v9"
@@ -34,6 +34,8 @@ func downloadFixture(rdb *redis.Client, ctx context.Context, tournament_name str
 	// Leer el cuerpo del httpGet
 	body := _httpGET(url)
 
+	rdb.SAdd(ctx, PREFIX+"_URLS_DOWNLOADED", url)
+
 	// Parsear el JSON
 	var data []Match
 	json.Unmarshal(body, &data)
@@ -58,6 +60,9 @@ func downloadFixture(rdb *redis.Client, ctx context.Context, tournament_name str
 				Member: string(serialized_match),
 			},
 		)
+
+		// Agregar el partido a la estructura (arbol) de partidos
+
 	}
 	return *fixture
 }
@@ -65,12 +70,12 @@ func downloadFixture(rdb *redis.Client, ctx context.Context, tournament_name str
 func (f *Fixture) registerMatch(match Match) {
 	// Registro los equipos
 	if _, exists := f.Teams[match.HomeTeam]; !exists {
-		fmt.Println("New team: " + match.HomeTeam)
+		// fmt.Println("New team: " + match.HomeTeam)
 		f.Teams[match.HomeTeam] = *NewTeam(match.HomeTeam)
 		f.N_TEAMS++
 	}
 	if _, exists := f.Teams[match.AwayTeam]; !exists {
-		fmt.Println("New team: " + match.AwayTeam)
+		// fmt.Println("New team: " + match.AwayTeam)
 		f.Teams[match.AwayTeam] = *NewTeam(match.AwayTeam)
 		f.N_TEAMS++
 	}
@@ -107,6 +112,7 @@ func (f *Fixture) registerMatch(match Match) {
 		awayTeam.QScore++
 	}
 	f.Teams[match.AwayTeam] = awayTeam
+
 	// Actualizo las estructuras de probabilidad conjunta
 	// TODO
 }

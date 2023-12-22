@@ -1,0 +1,38 @@
+
+
+SET TREE_MATCHES_LEVEL_1:
+-   cjt de equipos en el primer nivel
+-   tiene los nombres de variables de HSET
+
+HSET MATCHES_EQUIPO:
+-   hay un HSET por cada equipo que jugo un partido
+
+HSET_LEVEL_2:
+-   Atributos:
+----> parent
+----> partidosJugados:
+----> golesTeamLevel1:
+----> golesTeamLevel2:
+----> totalTeamLevel1_X:
+----> totalTeamLevel2_X:
+
+X in (amarillas, rojas, goles, corners, etc)
+
+proc registrarPartidoEnArbol(m):
+    if (m.t1 in tree.level_1) and (m.t2 in tree.level_1[m.t1]):
+        updateHSET in tree.level_1[m.t1][m.t2]
+        return
+
+    elif (m.t2 in tree.level_1) and (m.t1 in tree.level_1[m.t2]):
+        updateHSET in tree.level_1[m.t2][m.t1]
+
+    elif (m.t1 in tree.level_1):
+        tree.level_1[m.t1].agregarNuevoHSET(m.t2)
+    
+    elif (m.t2 in tree.level_1):
+        tree.level_1[m.t2].agregarNuevoHSET(m.t1) 
+
+    else:
+        tree.level_1.agregarNuevoHSET(m.t1)
+        tree.level_1[m.t1].agregarNuevoHSET(m.t2)
+
